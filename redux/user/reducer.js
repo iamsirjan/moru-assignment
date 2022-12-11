@@ -47,6 +47,26 @@ const UserReducer = (state = initialState, action) => {
         message: action.message,
       };
 
+    // edit users
+
+    case actions.EDIT_USERS_REQ:
+      return {
+        ...state,
+      };
+
+    case actions.EDIT_USERS_SUC:
+      return {
+        ...state,
+        userId: action.details,
+        allUsers: state?.allUsers,
+      };
+
+    case actions.EDIT_USERS_FAIL:
+      return {
+        ...state,
+        message: action.message,
+      };
+
     // default state
 
     default:

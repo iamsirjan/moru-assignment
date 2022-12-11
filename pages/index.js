@@ -8,10 +8,8 @@ export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.getUsers());
-    console.log("aaaa");
   }, []);
   const data = useSelector((state) => state?.user);
-  console.log(data);
 
   const style = {
     padding: "15px 0",
@@ -19,7 +17,8 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-        {data?.allUsers?.map((data, i) => (
+        {/* mapping the user data into the card component */}
+        {data?.allUsers?.map((userdata, i) => (
           <Col
             key={i}
             className="gutter-row"
@@ -30,11 +29,14 @@ export default function Home() {
           >
             <div style={style}>
               <CardComponent
-                user={data?.name}
-                number={data?.phone}
-                email={data?.email}
-                website={data?.website}
-                id={data?.id}
+                keyid={i}
+                allUserData={data?.allUsers}
+                data={userdata}
+                user={userdata?.name}
+                number={userdata?.phone}
+                email={userdata?.email}
+                website={userdata?.website}
+                id={userdata?.id}
               />
             </div>
           </Col>

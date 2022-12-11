@@ -19,12 +19,24 @@ import actions from "../../redux/user/actions";
 import { useDispatch } from "react-redux";
 const { Meta } = Card;
 
-export default function CardComponent({ user, email, number, website, id }) {
+export default function CardComponent({
+  user,
+  email,
+  number,
+  website,
+  id,
+  keyid,
+  data,
+  allUserData,
+}) {
   const detailiconstyle = {
     fontSize: "18px",
   };
   const dispatch = useDispatch();
+
+  // for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -34,6 +46,8 @@ export default function CardComponent({ user, email, number, website, id }) {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  // function to add user to favourite
   const [fav, setFav] = useState(false);
 
   const handlefav = () => {
@@ -42,18 +56,39 @@ export default function CardComponent({ user, email, number, website, id }) {
       toast(`${user} removed from favourite`);
     } else toast(`${user} added to favourite`);
   };
+
+  // function to delete user
   const handleDelete = (id) => {
     dispatch(actions.deleteUsers(id));
   };
 
+  // function to edit
+
+  const onFinish = (values) => {
+    data.name = values.name;
+    data.email = values.email;
+    data.phone = values.phone;
+    data.website = values.website;
+    const updatedvalue = [...allUserData];
+
+    // finding index and updating value to global store
+    const index = updatedvalue.indexOf(data);
+    updatedvalue[index] = { ...data };
+
+    // dispatching id and updated value to redux
+    dispatch(actions.editUsers(id, updatedvalue));
+  };
   return (
     <div className={styles.card}>
+      {/* modal containing edit form */}
       <ModalComponent
         handleOk={handleOk}
         isModalOpen={isModalOpen}
         handleCancel={handleCancel}
-        content={<FormField />}
+        content={<FormField onFinish={onFinish} />}
       />
+
+      {/* user card */}
       <Card
         cover={
           <img
@@ -80,7 +115,7 @@ export default function CardComponent({ user, email, number, website, id }) {
           </>,
           <EditOutlined
             key="edit"
-            onClick={showModal}
+            onClick={() => showModal(keyid)}
             style={{ color: "#000", fontSize: "20px" }}
           />,
           <DeleteOutlined
@@ -110,10 +145,9 @@ export default function CardComponent({ user, email, number, website, id }) {
   );
 }
 
-const FormField = () => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
+// user edit form
+
+const FormField = ({ onFinish }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <Form
@@ -129,13 +163,17 @@ const FormField = () => {
         <FormContainer label="Email" name="email" />
         <FormContainer label="Phone" name="phone" />
         <FormContainer label="Website" name="website" />
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
+        <div style={{ display: "flex", justifyContent: "end" }}>
+          <Button size="large" type="primary" danger htmlType="submit">
+            Submit
+          </Button>
+        </div>
       </Form>
     </div>
   );
 };
+
+// for menu icon creating props
 
 const IconWithData = ({ Icon, data }) => {
   return (

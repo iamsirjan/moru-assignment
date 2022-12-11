@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "../../styles/Modal.module.css";
 import { Button, Modal } from "antd";
+
+// a component for the modal
 const ModalComponent = ({
   title,
   content,

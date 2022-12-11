@@ -7,3 +7,7 @@ export const getUsers = () => {
 export const deleteUsers = (userId) => {
   return axios.delete(`${baseUrl}/users/${userId}`);
 };
+
+export const editUsers = (userId) => {
+  return axios.patch(`${baseUrl}/users/${userId}`);
+};

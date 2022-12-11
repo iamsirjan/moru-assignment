@@ -37,9 +37,28 @@ function* deleteUser(action) {
   }
 }
 
+function* editUser(action) {
+  try {
+    let apiResponse = yield call(deleteUsers, action.userId);
+
+    const id = action.userId;
+
+    yield put({
+      type: actions.EDIT_USERS_SUC,
+      details: id,
+    });
+    toast("User has been edited");
+  } catch (err) {
+    yield put({
+      type: actions.EDIT_USERS_FAIL,
+    });
+  }
+}
+
 export function* getUserDetails() {
   yield takeEvery(actions.GET_USERS_REQ, getAllUsers);
   yield takeEvery(actions.DLT_USERS_REQ, deleteUser);
+  yield takeEvery(actions.EDIT_USERS_REQ, editUser);
 }
 
 export default function* userDetails() {
